@@ -3,13 +3,22 @@ const path = require('path')
 const resolve = dir => path.join(__dirname, dir)
 
 module.exports = {
+  pluginOptions: {
+    'style-resources-loader': {
+      patterns: [
+        'D:\\working\\vue-project\\h5\\src\\styles\\common\\var.less'
+      ],
+      preProcessor: 'less'
+    }
+  },
   css: {
     loaderOptions: {
       less: {
         javascriptEnabled: true
+        // data: `@import "src/styles/common/var.less";`
       },
       sass: {
-        data: `@import "src/styles/common/var.scss";`
+        // data: `@import "src/styles/common/var.less";`
       }
     }
   },
@@ -33,7 +42,7 @@ module.exports = {
   // transpileDependencies: ['vux'], // 开启后会导致vux/axios文件报错
   devServer: {
     useLocalIp: true,
-    port: 3000,
+    port: 5000,
     hotOnly: true
   }
 }

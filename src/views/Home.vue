@@ -1,11 +1,39 @@
 <template>
   <div class="home">
-    <van-card num="2" tag="标签" price="2.00" desc="描述信息" title="商品标题" :thumb="imageURL" origin-price="10.00">
-      <div slot="footer">
-        <van-button size="mini">按钮</van-button>
-        <van-button size="mini">按钮</van-button>
+    <van-nav-bar title="6月份热销活动" />
+    <van-card tag="热卖" price="2.00" desc="描述信息" title="商品标题" :thumb="imageURL" origin-price="10.00" thumb-link="http://baidu.com">
+      <div slot="tag">
+        <van-tag mark type="danger">
+          热卖
+        </van-tag>
+      </div>
+      <van-row slot="title" gutter="20">
+        <van-col span="18">自定义商品标题</van-col>
+        <van-col span="6">
+          <van-button size="mini" type="warning" class="van-tag disabled-btn">
+            售完
+          </van-button>
+        </van-col>
+      </van-row>
+      <div slot="num">
+        <van-button size="small" type="warning">加入购物车</van-button>
       </div>
     </van-card>
+
+    <van-card tag="热卖" price="2.00" desc="描述信息" title="商品标题" :thumb="imageURL" origin-price="10.00" thumb-link="http://baidu.com">
+      <van-row slot="title" gutter="20">
+        <van-col span="18">自定义商品标题</van-col>
+        <van-col span="6">
+          <van-button size="mini" type="warning" class="van-tag disabled-btn">
+            售完
+          </van-button>
+        </van-col>
+      </van-row>
+      <div slot="num">
+        <van-button size="small" type="warning">加入购物车</van-button>
+      </div>
+    </van-card>
+
   </div>
 </template>
 
@@ -73,5 +101,13 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.van-card__content {
+  text-align: left;
+}
 
+.disabled-btn {
+  border-radius: 10em;
+  background-color: #aaa;
+  border: 0;
+}
 </style>

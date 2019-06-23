@@ -28,6 +28,7 @@ export default {
   .content {
     height: calc(100vh - 50px);
     overflow-y: auto;
+    background-color: @white-color;
   }
 }
 </style>
