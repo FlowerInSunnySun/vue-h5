@@ -1,34 +1,24 @@
 <template>
   <div class="home">
-    <van-nav-bar title="6月份热销活动" />
-    <van-card tag="热卖" price="2.00" desc="描述信息" title="商品标题" :thumb="imageURL" origin-price="10.00" thumb-link="http://baidu.com">
-      <div slot="tag">
+    <van-nav-bar :title="giftbagTitle" />
+     <van-card v-for="( item, key ) in giftbagData" :key="key"
+     :title="item.title" :price="item.price" :origin-price="item.originalPrice" :desc="item.name" :thumb="item.imageURL" thumb-link="http://baidu.com">
+
+      <!-- <div slot="tag" >
         <van-tag mark type="danger">
           热卖
         </van-tag>
-      </div>
-      <van-row slot="title" gutter="20">
-        <van-col span="18">自定义商品标题</van-col>
-        <van-col span="6">
-          <van-button size="mini" type="warning" class="van-tag disabled-btn">
-            售完
-          </van-button>
-        </van-col>
-      </van-row>
-      <div slot="num">
-        <van-button size="small" type="warning">加入购物车</van-button>
-      </div>
-    </van-card>
+      </div> -->
 
-    <van-card tag="热卖" price="2.00" desc="描述信息" title="商品标题" :thumb="imageURL" origin-price="10.00" thumb-link="http://baidu.com">
-      <van-row slot="title" gutter="20">
-        <van-col span="18">自定义商品标题</van-col>
+      <van-row slot="title" gutter="20" v-if="item.status==='售罄' || item.status==='售完'">
+        <van-col span="18">{{item.title}}</van-col>
         <van-col span="6">
           <van-button size="mini" type="warning" class="van-tag disabled-btn">
             售完
           </van-button>
         </van-col>
       </van-row>
+
       <div slot="num">
         <van-button size="small" type="warning">加入购物车</van-button>
       </div>
@@ -38,65 +28,46 @@
 </template>
 
 <script>
-// import { mapState, mapActions } from 'vuex'
-// import { formatDate } from '@/utils/assist'
-import goodImg from '@/assets/images/good.jpg'
+import { mapState, mapActions } from 'vuex'
+// import { getImgUrl } from '@/utils/assist'
 export default {
   components: {
   },
   name: 'home',
   data () {
     return {
-      imageURL: goodImg
-      // import meOff from '@/assets/images/footerBar/me_off.png'
-      // active: 0,
-      // now: Date.now(),
-      // searchData: {} // 搜索条件
+      active: 0,
+      now: Date.now(),
+      searchData: {} // 搜索条件
     }
   },
   computed: {
-    // ...mapState('mine', {
-    //   tableData (state) {
-    //     return state.list
-    //   },
-    //   pagination (state) {
-    //     return state.pagination
-    //   },
-    //   loading: state => state.loading
-    // })
+    ...mapState('home', {
+      giftbagData (state) {
+        console.log('数据===', state.list)
+        let list = state.list
+        // list = list.map(item => {
+        //   item.imageURL = getImgUrl(item.image)
+        //   return item
+        // })
+        return list
+      },
+      giftbagTitle (state) {
+        return state.title
+      },
+      loading: state => state.loading
+    })
   },
   created () {
-    // this.initData()
+    this.getData()
   },
   methods: {
-
-    // ...mapActions('mine', ['fetchList', 'changeLoading']),
-    //     initData () {
-    //       console.log('now - format: ', formatDate(this.now, 'YYYY-MM'))
-    //     },
-    //     async getTableData () { // 查询
-    //       this.changeLoading({ payload: true })
-    //       const params = this.getParams()
-    //       console.log('params: ', params)
-    //       const postData = {
-    //         payload: {
-    //           currentPage: 1,
-    //           pageSize: 10,
-    //           ...params
-    //         },
-    //         callback (err) {
-    //         }
-    //       }
-    //       await this.fetchList(postData)
-    //       this.changeLoading({ payload: false })
-    //     },
-    //     getParams () { // 获取查询参数
-    //       const params = { ...this.searchData }
-    //       params.currentPage = this.pagination.currentPage
-    //       params.pageSize = this.pagination.pageSize
-    //       return params
-    //     }
-
+    ...mapActions('home', ['fetchList', 'changeLoading']),
+    async getData () { // 查询
+      this.changeLoading({ payload: true })
+      await this.fetchList()
+      this.changeLoading({ payload: false })
+    }
   }
 }
 </script>

@@ -6,7 +6,7 @@ module.exports = {
   pluginOptions: {
     'style-resources-loader': {
       patterns: [
-        'D:\\working\\vue-project\\h5\\src\\styles\\common\\var.less'
+        resolve('src/styles/common/var.less')
       ],
       preProcessor: 'less'
     }
