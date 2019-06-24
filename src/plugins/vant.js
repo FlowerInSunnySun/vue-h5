@@ -13,6 +13,7 @@ import {
   Tabbar,
   TabbarItem,
   Picker,
+  PullRefresh,
   Search,
   Sidebar,
   SidebarItem,
@@ -33,6 +34,7 @@ Vue.use(Row)
   .use(Tabbar)
   .use(TabbarItem)
   .use(Picker)
+  .use(PullRefresh)
   .use(Search)
   .use(Sidebar)
   .use(SidebarItem)

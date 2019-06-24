@@ -2,7 +2,7 @@ import axios from 'axios'
 import Qs from 'qs'
 // import store from '@/store'
 
-const { API_URL = 'http://dev.baichengshui.com:8081/huileju-api/api/wechat/' } = process.env
+const { API_URL = 'http://dev.baichengshui.com/huileju-api/api/wechat/' } = process.env
 axios.defaults.baseURL = API_URL // 接口地址
 
 // 设置默认请求头

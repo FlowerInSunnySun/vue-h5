@@ -1,29 +1,37 @@
 <template>
   <div class="home">
-    <van-nav-bar :title="giftbagTitle" />
-     <van-card v-for="( item, key ) in giftbagData" :key="key"
-     :title="item.title" :price="item.price" :origin-price="item.originalPrice" :desc="item.name" :thumb="item.imageURL" thumb-link="http://baidu.com">
-
-      <!-- <div slot="tag" >
+    <van-nav-bar :title="giftbagTitle"/>
+    <van-pull-refresh class="refresh-box" v-model="isLoading" @refresh="onRefresh">
+      <div slot="default">
+        <van-card
+          v-for="( item, key ) in giftbagData"
+          :key="key"
+          :title="item.title"
+          :price="item.price"
+          :origin-price="item.originalPrice"
+          :desc="item.name"
+          :thumb="item.imageURL"
+          thumb-link="http://baidu.com"
+        >
+          <!-- <div slot="tag" >
         <van-tag mark type="danger">
           热卖
         </van-tag>
-      </div> -->
+          </div>-->
 
-      <van-row slot="title" gutter="20" v-if="item.status==='售罄' || item.status==='售完'">
-        <van-col span="18">{{item.title}}</van-col>
-        <van-col span="6">
-          <van-button size="mini" type="warning" class="van-tag disabled-btn">
-            售完
-          </van-button>
-        </van-col>
-      </van-row>
+          <van-row slot="title" gutter="20" v-if="item.status==='售罄' || item.status==='售完'">
+            <van-col span="18">{{item.title}}</van-col>
+            <van-col span="6">
+              <van-button size="mini" type="warning" class="van-tag disabled-btn">售完</van-button>
+            </van-col>
+          </van-row>
 
-      <div slot="num">
-        <van-button size="small" type="warning">加入购物车</van-button>
+          <div slot="num">
+            <van-button size="small" type="warning">加入购物车</van-button>
+          </div>
+        </van-card>
       </div>
-    </van-card>
-
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -36,6 +44,7 @@ export default {
   name: 'home',
   data () {
     return {
+      isLoading: false,
       active: 0,
       now: Date.now(),
       searchData: {} // 搜索条件
@@ -67,11 +76,29 @@ export default {
       this.changeLoading({ payload: true })
       await this.fetchList()
       this.changeLoading({ payload: false })
+    },
+    onRefresh () {
+      setTimeout(() => {
+        this.$toast('刷新成功')
+        this.isLoading = false
+        this.getData()
+      }, 500)
     }
   }
 }
 </script>
 <style lang="less" scoped>
+.home {
+  height: calc(100vh - 50px);
+  .refresh-box {
+    height: calc(100vh - 106px);
+    ::v-deep {
+      .van-pull-refresh__track {
+        height: calc(100vh - 106px);
+      }
+    }
+  }
+}
 .van-card__content {
   text-align: left;
 }
