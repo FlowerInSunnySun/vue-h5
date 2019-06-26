@@ -1,24 +1,14 @@
 <template>
   <div class="tab_class">
     <div class="tal_class_searchBox">
-      <van-search placeholder="点击前往搜索" />
+      <van-search placeholder="点击前往搜索"/>
       <div class="tal_class_searchMask"></div>
     </div>
     <div class="class_tree clearfix">
       <ul class="class_tree_nav">
-        <li class="active_nav">
-          家电
-        </li>
-        <li>
-          生活用品
-        </li>
+        <li :class="activeNav === item.id ? 'active_nav' : ''" v-for="item in typeData" :key="item.id" @click="navClick(item.id)">{{item.name}}</li>
       </ul>
       <div class="class_tree_content">
-        <!-- <div class="class_tree_all">
-                <span>全部
-                  <i class="van-icon van-icon-arrow"></i>
-                </span>
-              </div> -->
         <div class="class_tree_items_wrap clearfix">
           <div @click="$router.push({path: '/detail'})">
             <div class="class_tree_item_img">
@@ -50,25 +40,71 @@
             </div>
             <div class="class_tree_item_name">小家电xx</div>
           </div>
-
         </div>
       </div>
     </div>
-
   </div>
 </template>
 <script>
 import goodImg from '@/assets/images/good.jpg'
+import { mapState, mapActions } from 'vuex'
+
 export default {
+  components: {
+  },
+  name: 'list',
   data () {
     return {
-      imageURL: goodImg,
-      activeKey: 0
+      activeNav: null,
+      isLoading: false,
+      imageURL: goodImg
     }
   },
+  computed: {
+    ...mapState('list', {
+      goodList (state) {
+        let list = state.list
+        return list
+      },
+      typeData (state) {
+        let types = state.types
+        console.log('2222左边菜单数据===', types)
+        return types
+      },
+      loading: state => state.loading
+    })
+  },
+  created () {
+    this.getData()
+  },
   methods: {
-    onChange (key) {
-      this.activeKey = key
+    ...mapActions('list', ['fetchTypes', 'fetchProds', 'changeLoading']),
+    // 获取左边类型数据
+    async getData () {
+      this.changeLoading({ payload: true })
+      await this.fetchTypes()
+      this.navClick(this.typeData[0].id)
+      this.changeLoading({ payload: false })
+    },
+
+    // 根据左边产品类型获取产品列表
+    async getProds (id) {
+      this.changeLoading({ payload: true })
+      await this.fetchProds({ typeId: id })
+      this.changeLoading({ payload: false })
+    },
+
+    navClick (id) {
+      this.activeNav = id
+      this.getProds(id)
+    },
+
+    onRefresh () {
+      setTimeout(() => {
+        this.$toast('刷新成功')
+        this.isLoading = false
+        this.getData()
+      }, 500)
     }
   }
 }
@@ -110,7 +146,7 @@ export default {
   height: 100%;
   background-color: #f8f8f8;
   overflow: scroll;
-  >li {
+  > li {
     @include one-border;
     height: 80px;
     line-height: 80px;
@@ -148,7 +184,7 @@ export default {
     padding: 10px 20px;
     margin-right: -3%;
     text-align: center;
-    >div {
+    > div {
       float: left;
       padding-right: 3%;
       box-sizing: border-box;

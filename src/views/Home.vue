@@ -37,28 +37,19 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-// import { getImgUrl } from '@/utils/assist'
 export default {
   components: {
   },
   name: 'home',
   data () {
     return {
-      isLoading: false,
-      active: 0,
-      now: Date.now(),
-      searchData: {} // 搜索条件
+      isLoading: false
     }
   },
   computed: {
     ...mapState('home', {
       giftbagData (state) {
-        console.log('数据===', state.list)
         let list = state.list
-        // list = list.map(item => {
-        //   item.imageURL = getImgUrl(item.image)
-        //   return item
-        // })
         return list
       },
       giftbagTitle (state) {
