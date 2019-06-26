@@ -1,45 +1,32 @@
 <template>
-  <div class="tab_class">
-    <div class="tal_class_searchBox">
+  <div class="tab_class list">
+    <!-- <div class="tal_class_searchBox">
       <van-search placeholder="点击前往搜索"/>
       <div class="tal_class_searchMask"></div>
-    </div>
+    </div>-->
     <div class="class_tree clearfix">
       <ul class="class_tree_nav">
         <li :class="activeNav === item.id ? 'active_nav' : ''" v-for="item in typeData" :key="item.id" @click="navClick(item.id)">{{item.name}}</li>
       </ul>
       <div class="class_tree_content">
         <div class="class_tree_items_wrap clearfix">
-          <div @click="$router.push({path: '/detail'})">
-            <div class="class_tree_item_img">
-              <!-- <img :src="item.pic_url" :alt="item.name"> -->
-              <img :src="imageURL">
+          <van-pull-refresh class="refresh-box" v-model="isLoading" @refresh="onRefresh">
+            <div class="good-item" @click="$router.push({path: '/detail'})">
+              <div class="class_tree_item_img">
+                <!-- <img :src="item.pic_url" :alt="item.name"> -->
+                <img :src="imageURL">
+              </div>
+              <div class="class_tree_item_name">小家电xx</div>
             </div>
-            <div class="class_tree_item_name">小家电xx</div>
-          </div>
 
-          <div>
-            <div class="class_tree_item_img">
-              <!-- <img :src="item.pic_url" :alt="item.name"> -->
-              <img :src="imageURL">
+            <div class="good-item">
+              <div class="class_tree_item_img">
+                <!-- <img :src="item.pic_url" :alt="item.name"> -->
+                <img :src="imageURL">
+              </div>
+              <div class="class_tree_item_name">小家电xx</div>
             </div>
-            <div class="class_tree_item_name">小家电xx</div>
-          </div>
-          <div>
-            <div class="class_tree_item_img">
-              <!-- <img :src="item.pic_url" :alt="item.name"> -->
-              <img :src="imageURL">
-            </div>
-            <div class="class_tree_item_name">小家电xx</div>
-          </div>
-
-          <div>
-            <div class="class_tree_item_img">
-              <!-- <img :src="item.pic_url" :alt="item.name"> -->
-              <img :src="imageURL">
-            </div>
-            <div class="class_tree_item_name">小家电xx</div>
-          </div>
+          </van-pull-refresh>
         </div>
       </div>
     </div>
@@ -103,13 +90,25 @@ export default {
       setTimeout(() => {
         this.$toast('刷新成功')
         this.isLoading = false
-        this.getData()
+        this.getProds(this.activeNav)
       }, 500)
     }
   }
 }
 </script>
 <style lang="less" scoped>
+.list {
+  height: calc(100vh - 50px);
+  .refresh-box {
+    height: calc(100vh - 50px);
+    ::v-deep {
+      .van-pull-refresh__track {
+        height: calc(100vh - 50px);
+      }
+    }
+  }
+}
+
 .tab_class {
   overflow: hidden;
   background-color: #fff;
@@ -131,6 +130,7 @@ export default {
 
 .class_tree {
   position: relative;
+  top: 30px;
   background-color: #fff;
   overflow-x: hidden;
   text-overflow: ellipsis;
@@ -184,7 +184,7 @@ export default {
     padding: 10px 20px;
     margin-right: -3%;
     text-align: center;
-    > div {
+    .good-item {
       float: left;
       padding-right: 3%;
       box-sizing: border-box;
